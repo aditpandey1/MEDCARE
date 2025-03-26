@@ -1,0 +1,80 @@
+
+.container {
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+
+  .heading {
+    text-align: center;
+    color: #123524;
+  }
+  
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .form input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+
+  .addBtn {
+    background-color: #004d33;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .addBtn:hover {
+    background-color: #006d47;
+  }
+  
+
+  .doctorList {
+    margin-top: 20px;
+    list-style: none;
+    padding: 0;
+  }
+  
+
+  .doctorItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  .deleteBtn {
+    background-color: #b85c5c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  .deleteBtn:hover {
+    background-color: #a04545;
+  }
+  .doctorImage {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-top: 10px;
+  }
+  
+  
