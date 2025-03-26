@@ -7,9 +7,17 @@ const nextConfig: NextConfig = {
                 hostname: "via.placeholder.com",
             },
             {
-                hostname: "shutterstock.com",
+                hostname: "www.shutterstock.com",
             },
         ],
+    },
+    async rewrites() {
+        return [
+            {
+                source: "/api/:path*",
+                destination: "http://localhost:3001/api/:path*", 
+            },
+        ];
     },
 };
 

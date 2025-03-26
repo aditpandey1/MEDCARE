@@ -5,7 +5,7 @@ import CardComp from "../Card/Card";
 import Search from "../SearchBar/Search";
 import styles from "./CardsGrid.module.css";
 
-const doctors = [
+const doctorsData = [
     {
         id: 1,
         name: "Dr. Jane Doe",
@@ -115,6 +115,7 @@ const doctors = [
         image: "https://via.placeholder.com/150",
     },
 ];
+export const doctors = doctorsData;
 
 export default function ShowCards() {
     const [filters, setFilters] = useState({
