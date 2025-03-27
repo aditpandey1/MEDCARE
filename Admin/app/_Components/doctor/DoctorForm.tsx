@@ -1,30 +1,10 @@
 "use client";
 import { useState } from "react";
-import styles from "./DoctorManagement.module.css";
+import styles from "./DoctorForm.module.css";
 
-export default function DoctorManagement() {
-  const [doctors, setDoctors] = useState([
-    { 
-      id: 1, 
-      name: "Dr. John Doe", 
-      specialty: "Cardiologist", 
-      email: "john@example.com", 
-      phone: "123-456-7890", 
-      qualification: "MBBS, MD", 
-      location: "New York", 
-      experience: "10 years",
-      image: "" 
-    }
-  ]);
+export default function DoctorForm({ onDoctorAdded }: { onDoctorAdded: (doctor: any) => void }) {
   const [newDoctor, setNewDoctor] = useState({ 
-    name: "", 
-    specialty: "", 
-    email: "", 
-    phone: "", 
-    qualification: "", 
-    location: "", 
-    experience: "", 
-    image: "" 
+    name: "", specialty: "", email: "", phone: "", qualification: "", location: "", experience: "", image: "" 
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
@@ -39,10 +19,10 @@ export default function DoctorManagement() {
 
   const uploadImageToCloudinary = async () => {
     if (!imageFile) return null;
-    
+
     const formData = new FormData();
     formData.append("file", imageFile);
-    formData.append("upload_preset", "your_upload_preset"); // Replace with your Cloudinary upload preset
+    formData.append("upload_preset", "your_upload_preset"); // Replace with Cloudinary preset
 
     try {
       const response = await fetch("https://api.cloudinary.com/v1_1/your_cloud_name/image/upload", {
@@ -50,7 +30,7 @@ export default function DoctorManagement() {
         body: formData
       });
       const data = await response.json();
-      return data.secure_url; // Returns the uploaded image URL
+      return data.secure_url;
     } catch (error) {
       console.error("Error uploading image:", error);
       return null;
@@ -59,25 +39,21 @@ export default function DoctorManagement() {
 
   const addDoctor = async () => {
     if (!newDoctor.name || !newDoctor.specialty || !newDoctor.email || !newDoctor.phone || !newDoctor.qualification || !newDoctor.location || !newDoctor.experience) return;
-    
+
     setLoading(true);
     const imageUrl = await uploadImageToCloudinary();
     setLoading(false);
 
-    setDoctors([...doctors, { ...newDoctor, id: Date.now(), image: imageUrl || "" }]);
+    const doctorData = { ...newDoctor, id: Date.now(), image: imageUrl || "" };
+    onDoctorAdded(doctorData);
+
     setNewDoctor({ name: "", specialty: "", email: "", phone: "", qualification: "", location: "", experience: "", image: "" });
     setImageFile(null);
   };
 
-  const deleteDoctor = (id: any) => {
-    setDoctors(doctors.filter((doctor) => doctor.id !== id));
-  };
-
   return (
     <div className={styles.container}>
-      <h2>Manage Doctors</h2>
-
-      {/* Add Doctor Form */}
+      <h2>Add Doctor</h2>
       <div className={styles.form}>
         <input type="text" name="name" placeholder="Doctor Name" value={newDoctor.name} onChange={handleChange} />
         <input type="text" name="specialty" placeholder="Specialty" value={newDoctor.specialty} onChange={handleChange} />
@@ -91,24 +67,9 @@ export default function DoctorManagement() {
           {loading ? "Uploading..." : "Add Doctor"}
         </button>
       </div>
-
-      {/* Doctor List */}
-      <ul className={styles.doctorList}>
-        {doctors.map((doctor) => (
-          <li key={doctor.id} className={styles.doctorItem}>
-            <div>
-              <strong>{doctor.name}</strong> - {doctor.specialty}
-              <p>Email: {doctor.email} | Phone: {doctor.phone}</p>
-              <p>Qualification: {doctor.qualification} | Location: {doctor.location}</p>
-              <p>Experience: {doctor.experience}</p>
-              {doctor.image && <img src={doctor.image} alt={doctor.name} className={styles.doctorImage} />}
-            </div>
-            <button onClick={() => deleteDoctor(doctor.id)} className={styles.deleteBtn}>Delete</button>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
+
 
 
