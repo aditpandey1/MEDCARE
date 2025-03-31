@@ -1,34 +1,128 @@
 "use client";
 
-import { useState } from "react";
-import styles from "./AdminAppointments.module.css";
+import { useState, useEffect } from "react";
+import styles from "./appoint.module.css";
 
 type Appointment = {
   id: number;
-  patientName: string;
-  doctorName: string;
-  date: string;
-  time: string;
-  status: "Pending" | "Approved";
+  doctor_id: number;
+  doctor_name: string;
+  slot_time:string;
+  slot_id: number;
+  appointment_date: string;
+  status: string;
+  username: string;
+  user_emailid: string;
 };
 
 export default function AdminAppointments() {
-  const [appointments, setAppointments] = useState<Appointment[]>([
-    { id: 1, patientName: "John Doe", doctorName: "Dr. Smith", date: "2025-03-26", time: "10:00 AM", status: "Pending" },
-    { id: 2, patientName: "Jane Smith", doctorName: "Dr. Brown", date: "2025-03-27", time: "2:00 PM", status: "Pending" },
-  ]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [actionLoading, setActionLoading] = useState<number | null>(null);
 
-  const approveAppointment = (id: number) => {
-    setAppointments((prev) =>
-      prev.map((appt) =>
-        appt.id === id ? { ...appt, status: "Approved" } : appt
-      )
-    );
+  useEffect(() => {
+    fetchAppointments();
+  }, []);
+
+  // Fetch Appointments
+  const fetchAppointments = async () => {
+    try {
+        const response = await fetch('http://localhost:3001/api/admin/appointments', {
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Failed to fetch appointments: ${response.status} ${response.statusText}`);
+        }
+        
+
+        const data = await response.json();
+        console.log('Appointments data:', data); // Log the data to see what is returned
+        setAppointments(data);
+        setLoading(false);
+    } catch (err) {
+        setError('Failed to load appointments');
+        setLoading(false);
+    }
+};
+
+  // Approve Appointment
+  const approveAppointment = async (id: number) => {
+    setActionLoading(id);
+    try {
+      const response = await fetch(`http://localhost:3001/api/admin/appointments/${id}/accept`, {
+        method: "PUT",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to approve appointment");
+      }
+
+      fetchAppointments(); // Refresh after approval
+    } catch (err) {
+      setError("Failed to approve appointment");
+    } finally {
+      setActionLoading(null);
+    }
   };
 
-  const deleteAppointment = (id: number) => {
-    setAppointments((prev) => prev.filter((appt) => appt.id !== id));
+  // Reject Appointment
+  const rejectAppointment = async (id: number) => {
+    setActionLoading(id);
+    try {
+      const response = await fetch(`http://localhost:3001/api/admin/appointments/${id}/reject`, {
+        method: "PUT",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to reject appointment");
+      }
+
+      fetchAppointments(); // Refresh after rejection
+    } catch (err) {
+      setError("Failed to reject appointment");
+    } finally {
+      setActionLoading(null);
+    }
   };
+
+  // Delete Appointment
+  const deleteAppointment = async (id: number) => {
+    setActionLoading(id);
+    try {
+      const response = await fetch(`http://localhost:3001/api/admin/appointments/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete appointment");
+      }
+
+      fetchAppointments(); // Refresh after deletion
+    } catch (err) {
+      setError("Failed to delete appointment");
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  // Show loading while data is being fetched
+  if (loading) {
+    return <div className={styles.loading}>Loading appointments...</div>;
+  }
+
+  // Show error if fetching failed
+  if (error) {
+    return <div className={styles.error}>{error}</div>;
+  }
 
   return (
     <div className={styles.container}>
@@ -37,19 +131,59 @@ export default function AdminAppointments() {
         {appointments.map((appt) => (
           <div key={appt.id} className={styles.appointmentCard}>
             <div className={styles.info}>
-              <p><strong>Patient:</strong> {appt.patientName}</p>
-              <p><strong>Doctor:</strong> {appt.doctorName}</p>
-              <p><strong>Date & Time:</strong> {appt.date} at {appt.time}</p>
-              <p>Status: <span className={appt.status === "Approved" ? styles.approved : styles.pending}>{appt.status}</span></p>
+              <p>
+                <strong>Doctor:</strong> {appt.doctor_name}
+              </p>
+              <p>
+                <strong>Date:</strong> {new Date(appt.appointment_date).toLocaleDateString()}
+              </p>
+              <p>
+                <strong>Time:</strong> {
+                    appt.slot_time
+                }
+              </p>
+              <p>
+                <strong>Patient Name:</strong>
+                {appt.username}
+              </p>
+              <p>
+                <strong>
+                  Status:{" "}
+                  <span className={
+                    appt.status === "approved" ? styles.approved :
+                    appt.status === "rejected" ? styles.rejected :
+                    styles.pending
+                  }>
+                    {appt.status.charAt(0).toUpperCase() + appt.status.slice(1)}
+                  </span>
+                </strong>
+              </p>
             </div>
             <div className={styles.actions}>
-              {appt.status === "Pending" && (
-                <button className={styles.approveButton} onClick={() => approveAppointment(appt.id)}>
-                  Approve
-                </button>
+              {appt.status === "pending" && (
+                <>
+                  <button
+                    className={styles.approveButton}
+                    onClick={() => approveAppointment(appt.id)}
+                    disabled={actionLoading === appt.id}
+                  >
+                    {actionLoading === appt.id ? "Approving..." : "Approve"}
+                  </button>
+                  <button
+                    className={styles.rejectButton}
+                    onClick={() => rejectAppointment(appt.id)}
+                    disabled={actionLoading === appt.id}
+                  >
+                    {actionLoading === appt.id ? "Rejecting..." : "Reject"}
+                  </button>
+                </>
               )}
-              <button className={styles.deleteButton} onClick={() => deleteAppointment(appt.id)}>
-                Delete
+              <button
+                className={styles.deleteButton}
+                onClick={() => deleteAppointment(appt.id)}
+                disabled={actionLoading === appt.id}
+              >
+                {actionLoading === appt.id ? "Deleting..." : "Delete"}
               </button>
             </div>
           </div>
@@ -58,4 +192,3 @@ export default function AdminAppointments() {
     </div>
   );
 }
-
