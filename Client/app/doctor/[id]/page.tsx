@@ -1,6 +1,6 @@
 "use client";
 
-import DoctorPage from "@/app/_Components/DetailPage/DoctorDetail";
+import DoctorPage from "@/app/_Components/Doctor-Detail-Page/DoctorDetail";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 

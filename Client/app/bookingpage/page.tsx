@@ -1,4 +1,4 @@
-import Appointment from "../_Components/appointment/appointmentComp";
+import Appointment from "../_Components/Appointment/appointmentComp";
 
 export default function Booking() {
     return <Appointment />;

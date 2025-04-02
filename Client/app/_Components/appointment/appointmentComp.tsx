@@ -1,6 +1,6 @@
 "use client";
 
-import Calendar from "../Calender/showCalender";
+import Calendar from "../Booking-Calender/showCalender";
 import style from "./booking.module.css";
 import { useState, useEffect } from "react";
 import { formatTime } from "@/utils/formatTime";

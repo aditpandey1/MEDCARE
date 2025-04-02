@@ -6,7 +6,7 @@ import styles from "./Login.module.css";
 import Image from "next/image";
 import { useLogin } from "@/app/providers/loginProvider";
 import { useRouter } from "next/navigation";
-import GoogleSignInButton from "../googleSignUpButton/Googlebutton";
+import GoogleSignInButton from "../SignUp-Button-Google/Googlebutton";
 import { toast } from "sonner";
 
 export default function LoginForm() {

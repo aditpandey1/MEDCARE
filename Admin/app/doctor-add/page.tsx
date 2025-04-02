@@ -1,5 +1,5 @@
 "use client"
-import DoctorForm from "../_Components/doctorComp/DoctorForm";
+import DoctorForm from "../_Components/component-doctor/DoctorForm";
 
 export default function Doctor(){
     const handleDoctorAdded = (doctor: any) => {

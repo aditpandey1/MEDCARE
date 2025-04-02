@@ -1,4 +1,4 @@
-import ShowCards from "../_Components/CardsGrid/ShowCards";
+import ShowCards from "../_Components/Grids/ShowCards";
 
 export default function Appointment() {
     return <ShowCards />;

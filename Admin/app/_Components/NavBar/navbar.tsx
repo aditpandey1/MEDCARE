@@ -11,13 +11,13 @@ export default function Navbar() {
       <h2 className={styles.logo}>Admin Panel</h2>
       <ul className={styles.navLinks}>
         <li className={pathname === "/add-doctor" ? styles.active : ""}>
-          <Link href="/add-doctor">Add Doctor</Link>
+          <Link href="/doctor-add">Add Doctor</Link>
         </li>
         <li className={pathname === "/list-doctors" ? styles.active : ""}>
-          <Link href="/list-doctors">List Doctors</Link>
+          <Link href="/doctor-list">List Doctors</Link>
         </li>
         <li className={pathname === "/pending-requests" ? styles.active : ""}>
-          <Link href="/appointment">Pending Requests</Link>
+          <Link href="/pending-request">Pending Requests</Link>
         </li>
       </ul>
       <button className={styles.logoutBtn}>Logout</button>

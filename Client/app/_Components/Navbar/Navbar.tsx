@@ -29,10 +29,10 @@ export default function Navbar() {
                         <Link href="/">Home</Link>
                     </li>
                     <li>
-                        <Link href="/appointments">Appointments</Link>
+                        <Link href="/user-appointments">Appointments</Link>
                     </li>
                     <li>
-                        <Link href="/healthblog">Health Blog</Link>
+                        <Link href="/blog">Health Blog</Link>
                     </li>
                     <li>
                         <Link href="/">Reviews</Link>
@@ -46,7 +46,7 @@ export default function Navbar() {
                                  justifyContent: "center",
                                  alignItems: "center",
                              }}
-                             href="/help"
+                             href="/emergency"
                             >
                              <FaAmbulance />
                              Help
@@ -66,10 +66,10 @@ export default function Navbar() {
                 </div>
             ) : (
                 <div className={styles.buttons}>
-                    <Link href={"/login"} className={styles.loginBtn}>
+                    <Link href={"/user-login"} className={styles.loginBtn}>
                         Login
                     </Link>
-                    <Link href={"/register"} className={styles.registerBtn}>
+                    <Link href={"/user-registration"} className={styles.registerBtn}>
                         Register
                     </Link>
                 </div>
@@ -110,14 +110,14 @@ export default function Navbar() {
                         </li>
                         <li>
                             <Link
-                                href="/appointments"
+                                href="/user-appointments"
                                 onClick={() => setMenuOpen(false)}
                             >
                                 Appointments
                             </Link>
                         </li>
                         <li>
-                            <Link href="/healthblog" onClick={() => setMenuOpen(false)}>
+                            <Link href="/blog" onClick={() => setMenuOpen(false)}>
                                 Health Blog
                             </Link>
                         </li>
@@ -156,14 +156,14 @@ export default function Navbar() {
                         ) : (
                             <>
                                 <Link
-                                    href="/login"
+                                    href="/user-login"
                                     className={styles.loginBtn}
                                     onClick={() => setMenuOpen(false)}
                                 >
                                     Login
                                 </Link>
                                 <Link
-                                    href="/register"
+                                    href="/user-registration"
                                     className={styles.registerBtn}
                                     onClick={() => setMenuOpen(false)}
                                 >

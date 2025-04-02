@@ -1,4 +1,4 @@
-import DoctorList from "../_Components/doctorGrid/Doctorlist";
+import DoctorList from "../_Components/Grid/Doctorlist";
 export default function ListDoctor(){
     return (
         <DoctorList/>
