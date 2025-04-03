@@ -1,3 +1,75 @@
+// "use client";
+
+// import { useEffect } from "react";
+// import { useRouter } from "next/navigation";
+// import { useLogin } from "@/app/providers/loginProvider";
+// import { toast } from "sonner";
+
+// export default function GoogleCallback() {
+//     const router = useRouter();
+//     const { setUser } = useLogin();
+
+//     useEffect(() => {
+//         const handleCallback = async () => {
+//             try {
+//                 // Get the user data from the backend
+//                 const response = await fetch(
+//                     "http://localhost:3001/api/users/me",
+//                     {
+//                         credentials: "include",
+//                     }
+//                 );
+
+//                 if (!response.ok) {
+//                     throw new Error("Failed to get user data");
+//                 }
+
+//                 const data = await response.json();
+//                 if (data) {
+//                     setUser(data);
+//                     toast.success("Google sign-in successful! Welcome back!");
+//                     router.push("/");
+//                 } else {
+//                     throw new Error("No user data received");
+//                 }
+//             } catch (error) {
+//                 console.error("Google callback error:", error);
+//                 toast.error("Google sign-in failed. Please try again.");
+//                 router.push("/login");
+//             }
+//         };
+
+//         handleCallback();
+//     }, [router, setUser]);
+
+//     return (
+//         <div
+//             style={{
+//                 display: "flex",
+//                 justifyContent: "center",
+//                 alignItems: "center",
+//                 height: "100vh",
+//                 backgroundImage: "url('/LoginHero.png')",
+//                 backgroundSize: "cover",
+//             }}
+//         >
+//             <div
+//                 style={{
+//                     background: "rgba(255, 255, 255, 0.15)",
+//                     padding: "2rem",
+//                     borderRadius: "10px",
+//                     backdropFilter: "blur(16px)",
+//                     textAlign: "center",
+//                     color: "#0b4b2f",
+//                     fontWeight: "500",
+//                 }}
+//             >
+//                 Completing Google sign-in...
+//             </div>
+//         </div>
+//     );
+// }
+
 "use client";
 
 import { useEffect } from "react";
@@ -5,41 +77,37 @@ import { useRouter } from "next/navigation";
 import { useLogin } from "@/app/providers/loginProvider";
 import { toast } from "sonner";
 
-export default function GoogleCallback() {
+export default function GoogleAuthCallback() {
     const router = useRouter();
     const { setUser } = useLogin();
 
     useEffect(() => {
-        const handleCallback = async () => {
+        const fetchUserData = async () => {
             try {
-                // Get the user data from the backend
-                const response = await fetch(
-                    "http://localhost:3001/api/users/me",
-                    {
-                        credentials: "include",
-                    }
-                );
+                const response = await fetch("http://localhost:3001/api/users/me", {
+                    credentials: "include",
+                });
 
                 if (!response.ok) {
-                    throw new Error("Failed to get user data");
+                    throw new Error("Unable to retrieve user details");
                 }
 
-                const data = await response.json();
-                if (data) {
-                    setUser(data);
-                    toast.success("Google sign-in successful! Welcome back!");
+                const userData = await response.json();
+                if (userData) {
+                    setUser(userData);
+                    toast.success("Google sign-in successful! Welcome!");
                     router.push("/");
                 } else {
-                    throw new Error("No user data received");
+                    throw new Error("No user information received");
                 }
             } catch (error) {
-                console.error("Google callback error:", error);
-                toast.error("Google sign-in failed. Please try again.");
+                console.error("Error during Google authentication:", error);
+                toast.error("Google sign-in failed. Please retry.");
                 router.push("/login");
             }
         };
 
-        handleCallback();
+        fetchUserData();
     }, [router, setUser]);
 
     return (
@@ -55,16 +123,16 @@ export default function GoogleCallback() {
         >
             <div
                 style={{
-                    background: "rgba(255, 255, 255, 0.15)",
+                    background: "rgba(255, 255, 255, 0.2)",
                     padding: "2rem",
-                    borderRadius: "10px",
-                    backdropFilter: "blur(16px)",
+                    borderRadius: "12px",
+                    backdropFilter: "blur(14px)",
                     textAlign: "center",
-                    color: "#0b4b2f",
-                    fontWeight: "500",
+                    color: "#0a4b2e",
+                    fontWeight: "bold",
                 }}
             >
-                Completing Google sign-in...
+                Finalizing Google authentication...
             </div>
         </div>
     );
